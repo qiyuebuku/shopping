@@ -1,0 +1,190 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>{{ title }}</title>
+	<link rel="stylesheet" type="text/css" href="/static/css/reset.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/main.css">
+    <script type="text/javascript" src="/static/js/jquery-1.12.4.min.js"></script>
+
+    {% block head %}
+{#        头#}
+    {% endblock head %}
+
+</head>
+<body>
+	<div class="header_con">
+		<div class="header">
+			<div class="welcome fl">欢迎来到天天生鲜!</div>
+			<div class="fr">
+				<div class="login_info fl">
+					欢迎您：<em>张 山</em>
+				</div>
+				<div class="login_btn fl">
+                    {% if request.session.status %}
+                        欢迎您：<em>{{request.session.user_info.username }}</em>
+                        <span>|</span>
+                        <a href="/user/logout/">退出</a>
+                    {% else %}
+                        <a href="/user/login/">登录</a>
+                        <span>|</span>
+                        <a href="/user/register/">注册</a>
+                    {% endif %}
+				</div>
+				<div class="user_link fl">
+					<span>|</span>
+					<a href="/user/user_center_info/">用户中心</a>
+					<span>|</span>
+					<a href="/cart/cart/">我的购物车</a>
+					<span>|</span>
+					<a href="/user/user_center_order/">我的订单</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="search_bar clearfix">
+		<a href="/goods/index/" class="logo fl"><img src="/static/images/logo.png"></a>
+		<div class="search_con fl">
+			<input type="text" class="input_text fl" name="" placeholder="搜索商品">
+			<input type="button" class="input_btn fr" name="" value="搜索">
+		</div>
+		<div class="guest_cart fr">
+			<a href="/cart/cart/" class="cart_name fl">我的购物车</a>
+			<div class="goods_count fl" id="show_count">0</div>
+		</div>
+	</div>
+
+	<div class="navbar_con">
+		<div class="navbar clearfix">
+			<div class="subnav_con fl">
+				<h1>全部商品分类</h1>
+				<span></span>
+				<ul class="subnav">
+					<li><a href="#model01" class="fruit">新鲜水果</a></li>
+                    <li><a href="#model02" class="seafood">海鲜水产</a></li>
+                    <li><a href="#model03" class="meet">猪牛羊肉</a></li>
+                    <li><a href="#model04" class="egg">禽类蛋品</a></li>
+                    <li><a href="#model05" class="vegetables">新鲜蔬菜</a></li>
+                    <li><a href="#model06" class="ice">速冻食品</a></li>
+				</ul>
+			</div>
+			<ul class="navlist fl">
+				<li><a href="/goods/index/">首页</a></li>
+				<li class="interval">|</li>
+				<li><a href="#">手机生鲜</a></li>
+				<li class="interval">|</li>
+				<li><a href="#">抽奖</a></li>
+			</ul>
+		</div>
+	</div>
+    {% block body %}
+{#        内容#}
+    {% endblock body %}
+
+	<div class="footer">
+		<div class="foot_link">
+			<a href="#">关于我们</a>
+			<span>|</span>
+			<a href="#">联系我们</a>
+			<span>|</span>
+			<a href="#">招聘人才</a>
+			<span>|</span>
+			<a href="#">友情链接</a>
+		</div>
+		<p>CopyRight © 2016 北京天天生鲜信息技术有限公司 All Rights Reserved</p>
+		<p>电话：010-****888    京ICP备*******8号</p>
+	</div>
+	<div class="add_jump"></div>
+
+	<script type="text/javascript">
+		var $add_x = $('#add_cart').offset().top;
+		var $add_y = $('#add_cart').offset().left;
+
+		var $to_x = $('#show_count').offset().top;
+		var $to_y = $('#show_count').offset().left;
+
+		$(".add_jump").css({'left':$add_y+80,'top':$add_x+10,'display':'block'});
+		$('#add_cart').click(function(){
+			$(".add_jump").stop().animate({
+				'left': $to_y+7,
+				'top': $to_x+7},
+				"fast", function() {
+					$(".add_jump").fadeOut('fast',function(){
+						{#$('#show_count').html(2);#}
+					});
+			});
+		});
+	</script>
+    <script src="/static/js/jquery.cookie.js"></script>
+    <script>
+        $.ajax({
+           url:'/cart/getCount/',
+           success:function (arg) {
+               $('#show_count').text(arg);
+           }
+        });
+        $(function () {
+        function countPrice(){
+            var count=parseInt($('#count').val());
+            var price=parseInt($('#price').text());
+            $('#totalPrice').text(price*count);
+        }
+        countPrice();
+        $('#insert').click(function () {
+            var count1=parseInt($(this).prev().val());
+            count1=count1+1;
+            $(this).prev().val(count1);
+            countPrice();
+        });
+
+        $('#add_cart').click(function () {
+            var count=parseInt($('#count').val());
+            var id=$('#add_cart').attr('i');
+            changeCartCount(count,id)
+        });
+        $('.operate .add_goods').click(function () {
+            var id=$(this).attr('i');
+            console.log(id);
+            changeCartCount(1,id);
+        });
+        function changeCartCount(count=1,id){
+            $.ajax({
+                'url':'/cart/addCart/',
+                'type':'post',
+                'data':{'count':count,'id':id},
+                headers: {'X-CSRFtoken': $.cookie('csrftoken')},
+                success:function (arg) {
+                    ret=JSON.parse(arg);
+                    console.log("返回数据：",ret);
+                    if (ret.state){
+                        {#alert('加入购物车成功');#}
+                        $('#show_count').text(ret.data.count);
+                    }else {
+                        alert(ret["error"]);
+                    }
+                }
+            })
+        }
+        $('#reduce').click(function () {
+            var count2=parseInt($(this).prev().prev().val());
+            if(count2>1){
+                $(this).prev().prev().val(count2-1);
+                countPrice();
+            }
+        });
+         $('#count').blur(function () {
+            var count=$(this).val();
+            if (!count){
+                $(this).val('1');
+            }
+            countPrice();
+        });
+    });
+
+    </script>
+    {% block script %}
+    {% endblock script %}
+
+</body>
+</html>

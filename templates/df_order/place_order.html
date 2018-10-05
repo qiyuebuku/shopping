@@ -1,0 +1,108 @@
+{% extends 'df_cart/base.html' %}
+
+    {% block body %}
+	<h3 class="common_title">确认收货地址</h3>
+    {% for foo in addressList %}
+        <div class="common_list_con clearfix">
+            <dl>
+                <dt>寄送到：</dt>
+                <dd><input type="radio" i="{{ foo.id }}" name="chooseAddress" checked="">{{ foo.harvestAddress }} （{{ foo.harvestName }} 收） {{ foo.harvestPhone }}</dd>
+            </dl>
+            <a href="user_center_site.html" class="edit_site">编辑收货地址</a>
+        </div>
+    {% endfor %}
+	
+	<h3 class="common_title">支付方式</h3>	
+	<div class="common_list_con clearfix">
+		<div class="pay_style_con clearfix">
+			<input type="radio" name="pay_style" checked>
+			<label class="cash">货到付款</label>
+			<input type="radio" name="pay_style">
+			<label class="weixin">微信支付</label>
+			<input type="radio" name="pay_style">
+			<label class="zhifubao"></label>
+			<input type="radio" name="pay_style">
+			<label class="bank">银行卡支付</label>
+		</div>
+	</div>
+
+	<h3 class="common_title">商品列表</h3>
+	
+	<div class="common_list_con clearfix">
+		<ul class="goods_list_th clearfix">
+			<li class="col01">商品名称</li>
+			<li class="col02">商品单位</li>
+			<li class="col03">商品价格</li>
+			<li class="col04">数量</li>
+			<li class="col05">小计</li>		
+		</ul>
+        {% for foo in  goodsListInfo%}
+            <ul class="goods_list_td clearfix">
+                <li class="col01">{{ foo.id }}</li>
+                <li class="col02"><img src="/{{ foo.goods.cover }}"></li>
+                <li class="col03">{{ foo.goods.title }}</li>
+                <li class="col04">{{ foo.goods.unit }}</li>
+                <li class="col05">{{ foo.goods.price }}</li>
+                <li class="col06">{{ foo.amount }}</li>
+                <li class="col07">{{ foo.account }}</li>
+            </ul>
+        {% endfor %}
+
+
+	</div>
+
+	<h3 class="common_title">总金额结算</h3>
+
+	<div class="common_list_con clearfix">
+		<div class="settle_con">
+			<div class="total_goods_count">共<em>{{ account }}</em>件商品，总金额<b>{{ amount }}元</b></div>
+			<div class="transit">运费：<b>0元</b></div>
+			<div class="total_pay">实付款：<b>{{ amount}}元</b></div>
+		</div>
+	</div>
+
+	<div class="order_submit clearfix">
+		<a href="javascript:" id="order_btn">提交订单</a>
+	</div>
+	<div class="popup_con">
+		<div class="popup">
+			<p>订单提交成功！</p>
+		</div>
+		
+		<div class="mask"></div>
+	</div>
+    {% endblock body %}
+
+	{% block script %}
+	<script type="text/javascript">
+		$('#order_btn').click(function() {
+		    var chooseAddress=$("input:radio:checked")[0];
+		    var pid=$(chooseAddress).attr('i');
+		    console.log(pid);
+		    $.ajax({
+                url:'/order/addOrder/',
+                type:'post',
+                data:{'pid':pid},
+                headers: {'X-CSRFtoken': $.cookie('csrftoken')},
+                success:function (arg) {
+                    console.log('ok');
+                    ret=JSON.parse(arg);
+                    if (ret["status"]){
+                        console.log('ok');
+                        localStorage.setItem('order_finish',2);
+                        $('.popup_con').fadeIn('fast', function() {
+                            setTimeout(function(){
+                                $('.popup_con').fadeOut('fast',function(){
+                                    window.location.href = '/user/user_center_order/';
+                                });
+                            },2000)
+			            });
+                    }
+                }
+            })
+
+		});
+	</script>
+    {% endblock script %}
+
+

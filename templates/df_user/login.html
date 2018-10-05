@@ -1,0 +1,40 @@
+{% extends 'df_user/baseButton.html' %}
+{% block head %}
+{% endblock head %}
+
+    {% block body %}
+	<div class="login_top clearfix">
+		<a href="/goods/index/" class="login_logo"><img src="/static/images/logo02.png"></a>
+	</div>
+
+	<div class="login_form_bg">
+		<div class="login_form_wrap clearfix">
+			<div class="login_banner fl"></div>
+			<div class="slogan fl">日夜兼程 · 急速送达</div>
+			<div class="login_form fr">
+				<div class="login_title clearfix">
+					<h1>用户登录</h1>
+					<a href="/user/register/">立即注册</a>
+				</div>
+                <div style="border: 1px solid #ffb4a8;padding: 10px 0;background-color: #fef2f2;text-align: center">
+                    <div style="color: red;">{{ verify.username.errors }}</div>
+                    <div style="color: red;">{{ verify.password.errors }}</div>
+                </div>
+
+				<div class="form_input">
+					<form action="/user/login/" method="post">
+                        {% csrf_token %}
+                        {{ verify.username }}
+                        {{ verify.password }}
+						<div class="more_input clearfix">
+							<input type="checkbox" name="">
+							<label>记住用户名</label>
+							<a href="#">忘记密码</a>
+						</div>
+						<input type="submit" name="" value="登录" class="input_submit">
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	{% endblock body %}

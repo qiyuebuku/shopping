@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>天天生鲜-用户中心</title>
+	<link rel="stylesheet" type="text/css" href="/static/css/reset.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/main.css">
+    <style>
+        .left_menu_con ul a:hover{
+            background-color: #00bc6f;
+        }
+    </style>
+</head>
+<body>
+        <div class="header_con">
+            <div class="header">
+                <div class="welcome fl">欢迎来到天天生鲜!</div>
+                <div class="fr">
+                    <div class="login_btn fl">
+                        欢迎您：<em>{{request.session.user_info.username }}</em>
+                        <span>|</span>
+                        <a href="/user/logout/">退出</a>
+                    </div>
+                    <div class="user_link fl">
+                        <span>|</span>
+                        <a href="/user/user_center_info/">用户中心</a>
+                        <span>|</span>
+                        <a href="/cart/cart/">我的购物车</a>
+                        <span>|</span>
+                        <a href="/user/user_center_order/">我的订单</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="search_bar clearfix">
+            <a href="/goods/index/" class="logo fl"><img src="/static/images/logo.png"></a>
+            <div class="sub_page_name fl">|&nbsp;&nbsp;&nbsp;&nbsp;用户中心</div>
+            <div class="search_con fr">
+                <input type="text" class="input_text fl" name="" placeholder="搜索商品">
+                <input type="button" class="input_btn fr" name="" value="搜索">
+            </div>
+        </div>
+
+        <div class="main_con clearfix">
+            <div class="left_menu_con clearfix">
+                <h3>用户中心</h3>
+                <ul>
+{#                    <li><a href="/user/user_center_info/" >· 个人信息</a></li>#}
+{#                    <li><a href="/user/user_center_order/">· 全部订单</a></li>#}
+{#                    <li><a href="/user/user_center_site/">· 收货地址</a></li>#}
+{#                    在服务端自动生成#}
+                    {{ left_menu_con }}
+                </ul>
+            </div>
+            {% block content %}
+{#                内容#}
+            {% endblock content %}
+
+        </div>
+
+        <div class="footer no-mp">
+            <div class="foot_link">
+                <a href="#">关于我们</a>
+                <span>|</span>
+                <a href="#">联系我们</a>
+                <span>|</span>
+                <a href="#">招聘人才</a>
+                <span>|</span>
+                <a href="#">友情链接</a>
+            </div>
+            <p>CopyRight © 2016 北京天天生鲜信息技术有限公司 All Rights Reserved</p>
+            <p>电话：010-****888    京ICP备*******8号</p>
+        </div>
+
+        <script src="/static/js/jquery-1.12.4.min.js"></script>
+        <script src="/static/js/jquery.cookie.js"></script>
+
+        <script>
+            $('.left_menu_con ul a').click(function () {
+                var v=$(this).parent().siblings().children();
+                $(v).each(function () {
+                   $(this).removeClass('active');
+                });
+                $(this).addClass('active');
+            })
+        </script>
+        {% block script %}
+        {% endblock script %}
+</body>
+</html>

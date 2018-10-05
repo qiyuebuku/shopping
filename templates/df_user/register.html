@@ -1,0 +1,55 @@
+{% extends "df_user/baseButton.html" %} <!-- 继承那个模板-->
+    {% block head %}
+        <script type="text/javascript" src="/static/js/register.js"></script>
+	{% endblock head%}
+
+    {% block body %}
+	<div class="register_con">
+		<div class="l_con fl">
+			<a class="reg_logo"><img src="/static/images/logo02.png"></a>
+			<div class="reg_slogan">足不出户  ·  新鲜每一天</div>
+			<div class="reg_banner"></div>
+		</div>
+
+		<div class="r_con fr">
+			<div class="reg_title clearfix">
+				<h1>用户注册</h1>
+				<a href="/user/login/">登录</a>
+			</div>
+			<div class="reg_form clearfix">
+				<form action="/user/register/" method="post">
+                    {% csrf_token %}
+				<ul>
+					<li>
+						<label>用户名:</label>
+                        {{ verify.username }}
+                        <div style="color: red;">{{ verify.username.errors }}</div>
+					</li>
+					<li>
+						<label>密码:</label>
+						{{ verify.password }}
+						<p style="color: red;">{{ verify.password.errors }}</p>
+					</li>
+					<li>
+						<label>邮箱:</label>
+						{{ verify.email }}
+						<p style="color: red;">{{ verify.email.errors }}</p>
+					</li>
+					<li class="agreement">
+						{{ verify.is_rmb }}
+						<label>同意”天天生鲜用户使用协议“</label>
+                        <p style="color: red;">{{ verify.is_rmb.errors }}</p>
+					</li>
+					<li class="reg_sub">
+						<input type="submit" value="注 册" name="">
+					</li>
+				</ul>
+
+				</form>
+			</div>
+		</div>
+	</div>
+    {% endblock body%}
+
+
+

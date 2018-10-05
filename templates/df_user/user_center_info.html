@@ -1,0 +1,33 @@
+{% extends 'df_user/headButton.html' %}
+{% load user_info %}
+{% block content %}
+    <div class="right_content clearfix">
+        <div class="info_con clearfix">
+            <h3 class="common_title2">基本信息</h3>
+            <ul class="user_info_list">
+                <li><span>用户名：</span>{% user_info_list request.session.user_info.username %}<br></li>
+                <li><span>电话号码：</span>{% user_info_list request.session.user_info.phone %}<br></li>
+                <li><span>送货地址：</span>{% user_info_list request.session.user_info.address %}<br></li>
+            </ul>
+        </div>
+
+        <h3 class="common_title2">最近浏览</h3>
+        <div class="has_view_list">
+            <ul class="goods_type_list clearfix">
+                {% for goods in RecentsGoods %}
+                    <li>
+                        <a href="{% url 'detail' goods.id %}"><img src="/{{ goods.cover }}"></a>
+                        <h4><a href="{% url 'detail' goods.id %}">{{ goods.title }}</a></h4>
+                        <div class="operate">
+                            <span class="prize">￥{{ goods.price }}</span>
+                            <span class="unit">{{ goods.unit }}</span>
+                            <a href="#" class="add_goods" title="加入购物车"></a>
+                        </div>
+                    </li>
+                {% endfor %}
+
+
+            </ul>
+        </div>
+    </div>
+{% endblock content %}

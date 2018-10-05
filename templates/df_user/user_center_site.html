@@ -1,0 +1,26 @@
+{% extends 'df_user/headButton.html' %}
+{% block content %}
+    <div class="right_content clearfix">
+        <h3 class="common_title2">收货地址</h3>
+        <div class="site_con">
+        <table border="1">
+            <ul>
+                {% for foo in addressList %}
+                <dl>
+                    <dt><span style="font-weight: bold">{{ foo.harvestName }}</span>&nbsp;&nbsp;<span style="font-size: 11px">{{ foo.harvestPhone }}</span></dt>
+                    <dd>{{ foo.harvestAddress }}</dd>
+                </dl>
+            {% endfor %}
+        </table>
+
+        </div>
+        <h3 class="common_title2">编辑地址</h3>
+        <div class="site_con">
+            <form action="/user/addHarvsetAddress/" method="POST">
+                {% csrf_token %}
+                {{ obj.as_ul }}
+                <input type="submit" name="" value="提交" class="info_submit">
+            </form>
+        </div>
+    </div>
+{% endblock content %}

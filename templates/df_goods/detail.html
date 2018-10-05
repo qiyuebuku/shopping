@@ -1,0 +1,28 @@
+{% extends 'df_goods/base.html' %}
+    {% block body %}
+	{{ body }}
+    {% endblock body %}
+
+
+    {% block script %}
+        <script>
+            $('.buy_btn').click(function () {
+                var count=$('#count').val();
+                var gid=$(this).next().attr('i');
+
+                $.ajax({
+                    url:'/order/order/',
+                    type:'post',
+                    data:{'count':count,'gid':gid},
+                    headers: {'X-CSRFtoken': $.cookie('csrftoken')},
+                    success:function (arg) {
+                        var ret=JSON.parse(arg);
+                        console.log(ret);
+                        if (ret["status"]){
+                            window.location.href = '/order/order/';
+                        }
+                    }
+                })
+            })
+        </script>
+    {% endblock script %}
